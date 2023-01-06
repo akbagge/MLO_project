@@ -1,0 +1,5 @@
+click==8.0.3
+Markdown==3.4.1
+numpy==1.21.5
+torch==1.13.1
+wget==3.2
