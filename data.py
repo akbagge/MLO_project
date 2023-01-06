@@ -1,47 +1,48 @@
-import torch
-import wget
-from torch.utils.data import Dataset
-import numpy as np
 import os
+import requests
+import shutil
+import pytorch_lightning as pl
+from torch.utils.data import DataLoader, random_split
 
-class CorruptMnist(Dataset):
-    def __init__(self, train):
-        self.download_data(train)
-        if train:
-            content = [ ]
-            for i in range(5):
-                content.append(np.load(f"train_{i}.npz", allow_pickle=True))
-            data = torch.tensor(np.concatenate([c['images'] for c in content])).reshape(-1, 1, 28, 28)
-            targets = torch.tensor(np.concatenate([c['labels'] for c in content]))
-        else:
-            content = np.load("test.npz", allow_pickle=True)
-            data = torch.tensor(content['images']).reshape(-1, 1, 28, 28)
-            targets = torch.tensor(content['labels'])
-            
-        self.data = data
-        self.targets = targets
-    
-    def download_data(self, train):
-        files = os.listdir()
-        if train:
-            for file_idx in range(5):
-                if f'train_{file_idx}.npy' not in files:
-                    wget.download(f"https://raw.githubusercontent.com/SkafteNicki/dtu_mlops/main/data/corruptmnist/train_{file_idx}.npz")
-        else:
-            if "test.npy" not in files:    
-                wget.download("https://raw.githubusercontent.com/SkafteNicki/dtu_mlops/main/data/corruptmnist/test.npz")
-    
-    def __len__(self):
-        return self.targets.numel()
-    
-    def __getitem__(self, idx):
-        return self.data[idx].float(), self.targets[idx]
+#Set the URL for the dataset in Google Drive
+url = "https://drive.google.com/drive/folders/1HVajOnnTGOt594MAvehNxf_jeWaeooTf"
 
+#Set the local file path for the dataset
+file_path = "dataset.zip"
 
-if __name__ == "__main__":
-    dataset_train = CorruptMnist(train=True)
-    dataset_test = CorruptMnist(train=False)
-    print(dataset_train.data.shape)
-    print(dataset_train.targets.shape)
-    print(dataset_test.data.shape)
-    print(dataset_test.targets.shape)
+#Download the dataset from Google Drive
+response = requests.get(url, stream=True)
+with open(file_path, "wb") as f:
+shutil.copyfileobj(response.raw, f)
+
+#Extract the dataset
+shutil.unpack_archive(file_path, ".")
+
+#Delete the zip file
+os.remove(file_path)
+
+#Create a PyTorch Lightning DataModule to handle the dataset
+
+class MyDataModule(pl.LightningDataModule):
+def init(self):
+super().__init__()
+
+def setup(self, stage=None):
+    # Load and preprocess the dataset
+    self.dataset = MyDataset()
+    
+    # Split the dataset into training and test sets
+    self.train_dataset, self.test_dataset = random_split(self.dataset, [0.8, 0.2])
+    
+def train_dataloader(self):
+    return DataLoader(self.train_dataset, batch_size=32)
+
+def val_dataloader(self):
+    return DataLoader(self.test_dataset, batch_size=32)
+
+#Initialize the DataModule
+data_module = MyDataModule()
+
+#Use the DataModule to retrieve the training and test dataloaders
+train_dataloader = data_module.train_dataloader()
+test_dataloader = data_module.val_dataloader()
