@@ -8,6 +8,7 @@ __pycache__/
 # Data for model (in dvc)
 Rice_Image_Dataset
 
+.dvc/tmp/
 # Distribution / packaging
 .Python
 env/
