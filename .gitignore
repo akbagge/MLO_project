@@ -6,7 +6,7 @@ __pycache__/
 *.so
 
 # Data for model (in dvc)
-Rice_Image_Dataset
+
 
 .dvc/tmp/
 # Distribution / packaging
