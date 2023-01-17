@@ -1,48 +1,46 @@
-import os
-import requests
-import shutil
-import pytorch_lightning as pl
-from torch.utils.data import DataLoader, random_split
+from __future__ import print_function
 
-#Set the URL for the dataset in Google Drive
-url = "https://drive.google.com/drive/folders/1HVajOnnTGOt594MAvehNxf_jeWaeooTf"
+import io
 
-#Set the local file path for the dataset
-file_path = "dataset.zip"
+import google.auth
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from googleapiclient.http import MediaIoBaseDownload
 
-#Download the dataset from Google Drive
-response = requests.get(url, stream=True)
-with open(file_path, "wb") as f:
-    shutil.copyfileobj(response.raw, f)
 
-#Extract the dataset
-shutil.unpack_archive(file_path, ".")
+def download_file(real_file_id):
+    """Downloads a file
+    Args:
+        real_file_id: ID of the file to download
+    Returns : IO object with location.
 
-#Delete the zip file
-os.remove(file_path)
+    Load pre-authorized user credentials from the environment.
+    TODO(developer) - See https://developers.google.com/identity
+    for guides on implementing OAuth2 for the application.
+    """
+    creds, _ = google.auth.default()
 
-#Create a PyTorch Lightning DataModule to handle the dataset
+    try:
+        # create drive api client
+        service = build('drive', 'v3', credentials=creds)
 
-class MyDataModule(pl.LightningDataModule):
-    def init(self):
-        super().__init__()
+        file_id = real_file_id
 
-    def setup(self, stage=None):
-        # Load and preprocess the dataset
-        self.dataset = MyDataset()
-        
-        # Split the dataset into training and test sets
-        self.train_dataset, self.test_dataset = random_split(self.dataset, [0.8, 0.2])
-        
-    def train_dataloader(self):
-        return DataLoader(self.train_dataset, batch_size=32)
+        # pylint: disable=maybe-no-member
+        request = service.files().get_media(fileId=file_id)
+        file = io.BytesIO()
+        downloader = MediaIoBaseDownload(file, request)
+        done = False
+        while done is False:
+            status, done = downloader.next_chunk()
+            print(F'Download {int(status.progress() * 100)}.')
 
-    def val_dataloader(self):
-        return DataLoader(self.test_dataset, batch_size=32)
+    except HttpError as error:
+        print(F'An error occurred: {error}')
+        file = None
 
-#Initialize the DataModule
-data_module = MyDataModule()
+    return file.getvalue()
 
-#Use the DataModule to retrieve the training and test dataloaders
-train_dataloader = data_module.train_dataloader()
-test_dataloader = data_module.val_dataloader()
+
+if __name__ == '__main__':
+    download_file(real_file_id='1KuPmvGq8yoYgbfW74OENMCB5H0n_2Jm9')
