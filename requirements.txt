@@ -8,7 +8,11 @@ protobuf==4.21.12
 python-dotenv==0.21.0
 setuptools==59.6.0
 timm==0.6.12
+<<<<<<< HEAD
 torch==1.13.1
 torchvision==0.14.1
 opencv-python==4.7.0.68
 flask==1.1.2
+=======
+flask==2.1.0
+>>>>>>> f31bb039cb813e627d034c07468b9f29a66cee4e
