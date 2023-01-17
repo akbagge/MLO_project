@@ -31,7 +31,7 @@ RUN pip3 install -r requirements.txt
 ENV FLASK_APP=main.py
 ENV FLASK_ENV=production
 
-EXPOSE $PORT
+EXPOSE 8080
 
 #CMD [ "python3", "data.py"]
-CMD flask run --host 0.0.0.0 --port $PORT
+CMD flask run --host 0.0.0.0 --port 8080
