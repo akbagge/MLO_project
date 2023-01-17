@@ -18,6 +18,8 @@ ENV PATH=$CONDA_DIR/bin:$PATH
 COPY requirements.txt requirements.txt
 COPY environment.yml environment.yml
 COPY src/ src/
+COPY uploads/ uploads/
+COPY templates/ templates/
 COPY data.py data.py
 COPY main.py main.py  
 COPY models/ models/
