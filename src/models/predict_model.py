@@ -18,7 +18,7 @@ AUGMENT = A.Compose(
 
 LABELS = ["Arborio", "Basmati", "Ipsala", "Jasmine", "Karacadag"]
 
-class RiceModel( ): 
+class RiceModel(): 
     
     def __init__(self) -> None:
         #super(RiceModel, self).__init__()
@@ -28,7 +28,6 @@ class RiceModel( ):
         self.model.eval()
 
     def predict(self, img_path): 
-
         with torch.no_grad():
             img = cv2.imread(img_path)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
