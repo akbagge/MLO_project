@@ -18,6 +18,7 @@ import argparse
 import logging
 import os
 import time
+import splitfolders
 from collections import OrderedDict
 from contextlib import suppress
 from datetime import datetime
@@ -96,6 +97,7 @@ group.add_argument('--dataset-download', action='store_true', default=False,
                    help='Allow download of dataset for torch/ and tfds/ datasets that support it.')
 group.add_argument('--class-map', default='', type=str, metavar='FILENAME',
                    help='path to class to idx mapping file (default: "")')
+
 
 # Model parameters
 group = parser.add_argument_group('Model parameters')
@@ -427,6 +429,7 @@ def main():
         checkpoint_path=args.initial_checkpoint,
         **args.model_kwargs,
     )
+
     if args.num_classes is None:
         assert hasattr(model, 'num_classes'), 'Model must have `num_classes` attr if not set on cmd line/config.'
         args.num_classes = model.num_classes  # FIXME handle model default vs config num_classes more elegantly
@@ -555,6 +558,10 @@ def main():
                 _logger.info("Using native Torch DistributedDataParallel.")
             model = NativeDDP(model, device_ids=[device], broadcast_buffers=not args.no_ddp_bb)
         # NOTE: EMA model does not need to be wrapped by DDP
+
+    ## CHANGED
+    splitfolders.ratio("Rice_Image_Dataset", output="output", seed=1337, ratio=(.8, .2), group_prefix=None, move=False)
+    os.rename('output/val', 'output/validation')
 
     # create the train and eval datasets
     if args.data and not args.data_dir:
@@ -714,7 +721,7 @@ def main():
 
     if utils.is_primary(args) and args.log_wandb:
         if has_wandb:
-            wandb.init(project=args.experiment, config=args)
+            wandb.init(project=args.experiment, config=args, entity='grp3')
         else:
             _logger.warning(
                 "You've requested to log metrics to wandb but package not found. "
@@ -742,6 +749,9 @@ def main():
     if utils.is_primary(args):
         _logger.info(
             f'Scheduled epochs: {num_epochs}. LR stepped per {"epoch" if lr_scheduler.t_in_epochs else "update"}.')
+
+    ## CHANGED wandb watch the gradients 
+    wandb.watch(model, log_freq=100)
 
     try:
         for epoch in range(start_epoch, num_epochs):
@@ -777,6 +787,8 @@ def main():
                 validate_loss_fn,
                 args,
                 amp_autocast=amp_autocast,
+                epoch=epoch,
+                num_epochs=num_epochs
             )
 
             if model_ema is not None and not args.model_ema_force_cpu:
@@ -790,6 +802,8 @@ def main():
                     args,
                     amp_autocast=amp_autocast,
                     log_suffix=' (EMA)',
+                    epoch=epoch,
+                    num_epochs=num_epochs
                 )
                 eval_metrics = ema_eval_metrics
 
@@ -901,6 +915,9 @@ def train_one_epoch(
             lrl = [param_group['lr'] for param_group in optimizer.param_groups]
             lr = sum(lrl) / len(lrl)
 
+            ## CHANGED
+            wandb.log({"loss": loss})
+
             if args.distributed:
                 reduced_loss = utils.reduce_tensor(loss.data, args.world_size)
                 losses_m.update(reduced_loss.item(), input.size(0))
@@ -953,9 +970,12 @@ def validate(
         loader,
         loss_fn,
         args,
+        epoch,
+        num_epochs,
         device=torch.device('cuda'),
         amp_autocast=suppress,
-        log_suffix=''
+        log_suffix='',
+        final_val=False,
 ):
     batch_time_m = utils.AverageMeter()
     losses_m = utils.AverageMeter()
@@ -963,6 +983,14 @@ def validate(
     top5_m = utils.AverageMeter()
 
     model.eval()
+
+    ## CHANGED wandb table
+    if epoch == num_epochs:
+        final_val = True
+    
+    if final_val:
+        columns = ['image', 'guess', 'truth']
+        my_table = wandb.Table(columns=columns)
 
     end = time.time()
     last_idx = len(loader) - 1
@@ -987,6 +1015,16 @@ def validate(
                     target = target[0:target.size(0):reduce_factor]
 
                 loss = loss_fn(output, target)
+
+            ## CHANGED add data to wandb table
+            if final_val:
+                maxk = min(max((1,)), output.size()[1])
+                _, pred = output.topk(maxk, 1, True, True)
+                pred = pred.t()
+
+                for i in range(len(target)):
+                    my_table.add_data(wandb.Image(input[i]), pred[i], target[i])
+
             acc1, acc5 = utils.accuracy(output, target, topk=(1, 5))
 
             if args.distributed:
