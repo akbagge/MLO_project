@@ -216,7 +216,7 @@ s164397, s221813, s174261, s174250
 >
 > Answer:
 
---- question 6 fill here ---
+We did not implement any rules for code quality and format for this project. We believed that it would be more trouble than what it's worth for a small project such as this. We know that these concepts matter for larger projects, since it will make the code easier to maintain, especially for projects with many contributors.
 
 ## Version control
 
