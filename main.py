@@ -6,7 +6,7 @@ from pprint import pprint
 from flask import Flask, request, flash, render_template
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = './uploads'
+UPLOAD_FOLDER = './static'
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg'}
 
 app = Flask(__name__)
@@ -34,10 +34,12 @@ def upload():
                 file.save(path)
             
             # Uploaded now infer
-            label, precision = model.predict(path)
-            return { 'label': label, 'precision': "{:.2f}%".format(precision)  }
+                label, precision = model.predict(path)
+                return render_template('base.html', label=label, url=filename, precision="{:.2f}%".format(precision))
+
+            return "File failed"
     else: 
-        return render_template('base.html')
+        return render_template('base.html', label=None, url=None, precision=None)
 
 def allowed_file(filename):
     return '.' in filename and \
