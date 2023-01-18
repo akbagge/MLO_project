@@ -147,7 +147,7 @@ be installed with `pip install click markdown`.
 >
 > Answer:
 
---- question 1 fill here ---
+3
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -158,7 +158,7 @@ be installed with `pip install click markdown`.
 >
 > Answer:
 
---- question 2 fill here ---
+s164397, s221813, s174261, s174250
 
 ### Question 3
 > **What framework did you choose to work with and did it help you complete the project?**
