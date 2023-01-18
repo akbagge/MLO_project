@@ -147,7 +147,7 @@ be installed with `pip install click markdown`.
 >
 > Answer:
 
---- question 1 fill here ---
+3
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -158,7 +158,7 @@ be installed with `pip install click markdown`.
 >
 > Answer:
 
---- question 2 fill here ---
+s164397, s221813, s174261, s174250
 
 ### Question 3
 > **What framework did you choose to work with and did it help you complete the project?**
@@ -216,7 +216,7 @@ be installed with `pip install click markdown`.
 >
 > Answer:
 
---- question 6 fill here ---
+We did not implement any rules for code quality and format for this project. We believed that it would be more trouble than what it's worth for a small project such as this. We know that these concepts matter for larger projects, since it will make the code easier to maintain, especially for projects with many contributors.
 
 ## Version control
 

@@ -20,7 +20,6 @@ COPY environment.yml environment.yml
 COPY src/ src/
 COPY uploads/ uploads/
 COPY templates/ templates/
-COPY data.py data.py
 COPY main.py main.py  
 COPY models/ models/
 COPY resources/ resources/
