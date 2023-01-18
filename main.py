@@ -1,20 +1,45 @@
 from timm.models.resnet import resnet50
+import os
 from src.models.predict_model import RiceModel
 import timm
 from pprint import pprint
+from flask import Flask, request, flash, render_template
+from werkzeug.utils import secure_filename
 
-IMAGE_SIZE = 224
+UPLOAD_FOLDER = './uploads'
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg'}
 
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-def main():
-    m = timm.create_model("resnet50", pretrained=True, checkpoint_path="models/model_best.pth.tar", num_classes=5 )
-    m.eval()
-    model = RiceModel(m)
+model = RiceModel()
+model.eval()
 
-    im = "resources/Karacadag/Karacadag (20).jpg"
+@app.route("/", methods=['GET', 'POST'])
+def upload(): 
+    if request.method == 'POST':
+            # check if the post request has the file part
+            if 'file' not in request.files:
+                return "No file"
 
-    model.predict(im)
+            file = request.files['file']
+            # if user does not select file, browser also
+            # submit an empty part without filename
+            if file.filename == '':
+                return "No file selected"
 
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(path)
+            
+            # Uploaded now infer
+            label, precision = model.predict(path)
+            return { 'label': label, 'precision': "{:.2f}%".format(precision)  }
+    else: 
+        return render_template('base.html')
 
-if __name__ == '__main__': 
-    main()
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+

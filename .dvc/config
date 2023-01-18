@@ -1,3 +1,4 @@
+
 [core]
     remote = remote_storage
 ['remote "storage"']
