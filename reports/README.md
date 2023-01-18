@@ -92,7 +92,11 @@ Our project produced an image classifier able to classify rice varieties between
 >
 > Answer:
 
-The list of dependecies was auto-generated using pipreqs. To get a complete copy of our development environment, one would have to run the following commands 
+We used (mini)conda, pipreqs, docker, and git to manage our dependencies. We created a conda environment to make sure that the dependencies of our project do not cross-contaminate with others. Requirements of both pip and conda were handled by package pipreqs. To get a complete copy of our development environment, one would have to build our docker file: 
+
+docker build -f Docker.dockerfile . -t trainer:latest. 
+
+This file contains requirements.txt and environment.yml (generated wrespectively with commands pipreqs and conda env export > environment.yml). Finally, version control was managed with Git. A new team member would be invited to join the github repository, clone it, and run the docker file. 
 
 ### Question 5
 
@@ -107,7 +111,7 @@ The list of dependecies was auto-generated using pipreqs. To get a complete copy
 > *experiments.*
 > Answer:
 
-From the cookiecutter template we have filled out the . We removed the LICENSE file, the notebooks, and references folders. We added the config folder to make 
+From the cookiecutter template we removed the LICENSE file, the notebooks, and references folders. We added the config folder. TO DO 
 
 ### Question 6
 
@@ -118,7 +122,7 @@ From the cookiecutter template we have filled out the . We removed the LICENSE f
 >
 > Answer:
 
-We did not implement any rules for code quality and format for this project. We believed that it would be more trouble than what it's worth for a small project such as this. We know that these concepts matter for larger projects, since it will make the code easier to maintain, especially for projects with many contributors.
+Code was formatted to meet Pep8 standards via black editor. Import statements were taken care with isort. We added docstrings to document some of our files. 
 
 ## Version control
 
@@ -131,7 +135,7 @@ We did not implement any rules for code quality and format for this project. We 
 >
 > Answer:
 
---- question 7 fill here ---
+TO DO
 
 ### Question 8
 
@@ -146,7 +150,7 @@ We did not implement any rules for code quality and format for this project. We 
 >
 > Answer:
 
---- question 8 fill here ---
+The total code coverage of code is X%, which includes all our source code. We are far from 100% coverage of our code and even if we were then...
 
 ### Question 9
 
@@ -161,7 +165,7 @@ We did not implement any rules for code quality and format for this project. We 
 >
 > Answer:
 
---- question 9 fill here ---
+We made use of both branches and PRs in our project. In our group, each member had an branch that they worked on in addition to the main branch. Each branch worked on different taks
 
 ### Question 10
 
@@ -429,5 +433,49 @@ We did not implement any rules for code quality and format for this project. We 
 >
 > Answer:
 
---- question 27 fill here ---
+s164397:
+s221813: Created a dedicated environment for the project to keep track of packages, filled out the requirements.txt file, checked code formatting, setup version control, wrote one configuration file for our experiments, created a data storage in GCP Bucket for our data and linked this with our data version control setup.
+s174261:
+s174250:
+
+    Create a git repository
+    Make sure that all team members have write access to the github repository
+    
+    Create the initial file structure using cookiecutter
+    Fill out the make_dataset.py file such that it downloads whatever data you need and
+    Add a model file and a training script and get that running
+    Remember to fill out the requirements.txt file with whatever dependencies that you are using
+    Remember to comply with good coding practices (pep8) while doing the project
+    Do a bit of code typing and remember to document essential parts of your code
+    Setup version control for your data or part of your data
+    Construct one or multiple docker files for your code
+    Build the docker files locally and make sure they work as intended
+    Write one or multiple configurations files for your experiments
+    Used Hydra to load the configurations and manage your hyperparameters
+    When you have something that works somewhat, remember at some point to to some profiling and see if you can optimize your code
+    Use Weights & Biases to log training progress and other important metrics/artifacts in your code. Additionally, consider running a hyperparameter optimization sweep.
+    Use Pytorch-lightning (if applicable) to reduce the amount of boilerplate in your code
+
+
+
+    Write unit tests related to the data part of your code
+    Write unit tests related to model construction and or model training
+    Calculate the coverage.
+    Get some continuous integration running on the github repository
+    Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
+    Create a trigger workflow for automatically building your docker images
+    Get your model training in GCP using either the Engine or Vertex AI
+    Create a FastAPI application that can do inference using your model
+    If applicable, consider deploying the model locally using torchserve
+    Deploy your model in GCP using either Functions or Run as the backend
+
+Week 3
+
+    Check how robust your model is towards data drifting
+    Setup monitoring for the system telemetry of your deployed model
+    Setup monitoring for the performance of your deployed model
+    If applicable, play around with distributed data loading
+    If applicable, play around with distributed model training
+    Play around with quantization, compilation and pruning for you trained models to increase inference speed
+
 >>>>>>> 9a348b05162ab0f56881a8e7e5c15eef1eaaeb2c
