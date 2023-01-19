@@ -22,7 +22,7 @@ class RiceModel():
     
     def __init__(self) -> None:
         #super(RiceModel, self).__init__()
-        self.model = timm.create_model("resnet50", pretrained=True, checkpoint_path="models/model_best.pth.tar", num_classes=5 )
+        self.model = timm.create_model("resnet50", pretrained=True, checkpoint_path="../models/model_best.pth.tar", num_classes=5 )
 
     def eval(self): 
         self.model.eval()
