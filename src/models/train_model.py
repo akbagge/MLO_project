@@ -560,8 +560,9 @@ def main():
         # NOTE: EMA model does not need to be wrapped by DDP
 
     ## CHANGED
-    splitfolders.ratio("Rice_Image_Dataset", output="output", seed=1337, ratio=(.8, .2), group_prefix=None, move=False)
-    os.rename('output/val', 'output/validation')
+    if (not os.path.exists('output/')):
+        splitfolders.ratio("Rice_Image_Dataset", output="output", seed=1337, ratio=(.8, .2), group_prefix=None, move=False)
+        os.rename('output/val', 'output/validation')
 
     # create the train and eval datasets
     if args.data and not args.data_dir:
@@ -774,6 +775,7 @@ def main():
                 loss_scaler=loss_scaler,
                 model_ema=model_ema,
                 mixup_fn=mixup_fn,
+                device=device
             )
 
             if args.distributed and args.dist_bn in ('broadcast', 'reduce'):
@@ -907,7 +909,8 @@ def train_one_epoch(
         if model_ema is not None:
             model_ema.update(model)
 
-        torch.cuda.synchronize()
+        if device==torch.device('cuda'):
+            torch.cuda.synchronize()
 
         num_updates += 1
         batch_time_m.update(time.time() - end)

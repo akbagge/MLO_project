@@ -23,6 +23,7 @@ COPY templates/ templates/
 COPY main.py main.py  
 COPY models/ models/
 COPY resources/ resources/
+COPY Rice_Image_Dataset/ Rice_Image_Dataset/
 
 RUN conda create --name docker_env --file environment.yml
 RUN pip3 install -r requirements.txt
@@ -34,4 +35,4 @@ EXPOSE 8080
 
 #CMD [ "python3", "data.py"]
 #CMD flask run --host 0.0.0.0 --port 8080
-CMD ['python3', 'src/models/train_model.py', '--data-dir', 'output', '--num_classes', '5', '--img-size', '224', '-b', '50', '--epochs', '10', '--pretrained', '--log-wandb', '--experiment', 'timm']
+CMD ["python", "-u", "src/models/train_model.py", "--data-dir", "output", "--num-classes", "5", "--img-size", "224", "-b", "50", "--epochs", "10", "--pretrained", "--log-wandb", "--experiment", "timm"]
