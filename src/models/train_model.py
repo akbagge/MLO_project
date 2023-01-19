@@ -1060,6 +1060,9 @@ def validate(
                         top1=top1_m,
                         top5=top5_m)
                 )
+    ## CHANGED remember to log table
+    if final_val:
+        wandb.log({'table':my_table})
 
     metrics = OrderedDict([('loss', losses_m.avg), ('top1', top1_m.avg), ('top5', top5_m.avg)])
 
