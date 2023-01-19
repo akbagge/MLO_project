@@ -143,7 +143,7 @@ Rules for code and quality format ensure consistency, maintainability, and reada
 >
 > Answer:
 
-TO DO
+2
 
 ### Question 8
 
@@ -158,7 +158,7 @@ TO DO
 >
 > Answer:
 
-No, having a code coverage of 100% does not guarantee that the code is error-free. Code coverage measures the percentage of code that is executed during testing, but it does not take into account the quality of the tests or the correctness of the code logic. Even if all lines of code are executed, there may still be bugs or errors present in the code. Additionally, code coverage does not account for edge cases or unexpected inputs that may cause the code to fail. Therefore, it is important to also conduct thorough testing and code review to ensure the overall quality and reliability of the code. The total code coverage of code is X%, which includes all our source code. 
+No, having a code coverage of 100% does not guarantee that the code is error-free. Code coverage measures the percentage of code that is executed during testing, but it does not take into account the quality of the tests or the correctness of the code logic. Even if all lines of code are executed, there may still be bugs or errors present in the code. Additionally, code coverage does not account for edge cases or unexpected inputs that may cause the code to fail. Therefore, it is important to also conduct thorough testing and code review to ensure the overall quality and reliability of the code. The total code coverage of code is 100%, which includes all our source code. 
 
 ### Question 9
 
@@ -207,7 +207,8 @@ Yes, initially Google Drive, then GCP bucket, and finally Git Large File System.
 >
 > Answer:
 
-TODO 
+We have organized our CI into 3 separate files: one for doing ..., one for running ... testing and one for running
+  ... . In particular for our ..., we used ... .An example of a triggered workflow can be seen here: <weblink>
 
 ## Running code and tracking experiments
 
@@ -226,7 +227,7 @@ TODO
 >
 > Answer:
 
-We used a simple argparser, that worked in the following way: python train.py --lr 1e-4 --batch_size 50 --seed 1337. Hyperparameters are stored under config/config.yaml+
+We used a simple argparser, that worked in the following way: python train.py --lr 1e-4 --batch_size 50 --seed 1337. Hyperparameters are stored under config/config.yaml
 
 TODO
 
@@ -290,7 +291,7 @@ In the training phase, Docker is used to create a containerized environment for 
 >
 > Answer:
 
-TODO
+When running into bugs while trying to run experiments, we first tied to identify the source of the problem by reviewing the code and any error messages that are displayed. Next, we used the TIMM documentation to understand why the trainig was failing. We also made sure to test small sections of the code at a time to ensure that the problem was not caused by an interaction between multiple sections. Additionally, we consulted online resources to see if similar bugs have been reported and if there were any known solutions. We did not perform any profiling of our main code. 
 
 ## Working in the cloud
 
@@ -396,7 +397,7 @@ TODO
 >
 > Answer:
 
-Group member 1 used
+In total, 2 credits were spend during development. The service costing the most was due to 
 
 ## Overall discussion of project
 
