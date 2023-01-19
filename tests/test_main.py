@@ -1,20 +1,59 @@
 import pytest
 import src
-from timm.models.resnet import resnet50
-import os
-from src.models.predict_model import RiceModel
-import timm
-from pprint import pprint
-from flask import Flask, request, flash, render_template
-from werkzeug.utils import secure_filename
+from flask import *
+from src.api.main import app
+import io
+from io import StringIO 
+from io import BytesIO
 
-from src.api import main
+def test_upload_noFile():
+    tester = app.test_client()
+    response = tester.post('/')
+    #print(response)
+    assert  b'No file' in response.data
 
-@pytest.fixture()
-def app():
-    main.app.requst
+def test_good():
+    tester = app.test_client()
+    with open('tests/data/a11.jpg', 'rb') as img1:
+        imgStringIO1 = (BytesIO(img1.read()))
 
-@pytest.fixture()
-def client(app):
-    return app.test_client()
+        response = tester.post('/',content_type='multipart/form-data', 
+                                    data={'image': (imgStringIO1, 'a11.jpg'),
+                                          'files': (imgStringIO1, 'a11.jpg')})
+        assert (response.status == "200 OK")
+
+def test_upload_noInput():
+    tester = app.test_client()
+    with open('tests/data/a11.jpg', 'rb') as img1:
+        imgStringIO1 = (BytesIO(img1.read()))
+
+    response = tester.post('/',content_type='multipart/form-data', 
+                                    data={'name':'test_item',
+                                          'user_id':'1',
+                                          'username':'admin',
+                                          'image': (imgStringIO1, 'img1.jpg')})
+    assert (response.status == "200 OK")
+
+
+def test_upload_NoFileSelected():
+    tester = app.test_client()
+    with open('tests/data/a11.jpg', 'rb') as img1:
+        imgStringIO1 = (BytesIO(img1.read()))
+
+    response = tester.post('/',content_type='multipart/form-data', 
+                                    data={'name':'test_item',
+                                          'user_id':'1',
+                                          'username':'admin',
+                                          'image': (b'', 'img1.jpg')})
+    assert (response.status == "200 OK")
+
+
+def test_upload_get():
+    tester = app.test_client()
+
+    response = tester.get('/')
+    assert (response.status == "200 OK")
+
+
+
 
