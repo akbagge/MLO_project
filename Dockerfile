@@ -23,8 +23,8 @@ COPY models/ models/
 RUN conda create --name docker_env --file environment.yml
 RUN pip3 install -r requirements.txt
 
-WORKDIR /model/src
-ENV FLASK_APP=api/main
+WORKDIR /model/src/api
+ENV FLASK_APP=main
 ENV FLASK_ENV=production
 
 EXPOSE 8080

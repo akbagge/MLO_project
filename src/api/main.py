@@ -1,12 +1,12 @@
 from timm.models.resnet import resnet50
 import os
 from ..models.predict_model import RiceModel
-import timm
 from pprint import pprint
 from flask import Flask, request, flash, render_template
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = './api/static'
+
+UPLOAD_FOLDER =  os.path.join(os.path.dirname(__file__), "static")
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg'}
 
 app = Flask(__name__)
