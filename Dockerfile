@@ -18,19 +18,15 @@ ENV PATH=$CONDA_DIR/bin:$PATH
 COPY requirements.txt requirements.txt
 COPY environment.yml environment.yml
 COPY src/ src/
-COPY uploads/ uploads/
-COPY templates/ templates/
-COPY main.py main.py  
 COPY models/ models/
-COPY resources/ resources/
 
 RUN conda create --name docker_env --file environment.yml
 RUN pip3 install -r requirements.txt
 
-ENV FLASK_APP=main.py
+WORKDIR /model/src/api
+ENV FLASK_APP=main
 ENV FLASK_ENV=production
 
 EXPOSE 8080
 
-#CMD [ "python3", "data.py"]
 CMD flask run --host 0.0.0.0 --port 8080
