@@ -14,3 +14,5 @@ opencv-python==4.7.0.68
 flask==2.1.0
 pytest
 coverage
+wandb==0.13.9
+split-folders==0.5.1
