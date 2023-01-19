@@ -2,6 +2,7 @@ import torch
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 import cv2
+import os
 import timm
 
 IMAGE_SIZE = 224
@@ -21,8 +22,9 @@ LABELS = ["Arborio", "Basmati", "Ipsala", "Jasmine", "Karacadag"]
 class RiceModel(): 
     
     def __init__(self) -> None:
+        model_path =  os.path.join(os.path.dirname(__file__), "../../models/model_best.pth.tar")
         #super(RiceModel, self).__init__()
-        self.model = timm.create_model("resnet50", pretrained=True, checkpoint_path="../models/model_best.pth.tar", num_classes=5 )
+        self.model = timm.create_model("resnet50", pretrained=True, checkpoint_path=model_path, num_classes=5 )
 
     def eval(self): 
         self.model.eval()
