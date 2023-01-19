@@ -41,6 +41,29 @@ def upload():
     else: 
         return render_template('base.html', label=None, url=None, precision=None)
 
+@app.route("/json", methods=['POST'])
+def json(): 
+    # check if the post request has the file part
+    if 'file' not in request.files:
+        return "No file"
+
+    file = request.files['file']
+    # if user does not select file, browser also
+    # submit an empty part without filename
+    if file.filename == '':
+        return "No file selected"
+
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(path)
+    
+        label, precision = model.predict(path)
+        return {"label": label, "precision": precision}
+
+    return "File failed"
+    
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
