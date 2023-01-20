@@ -10,7 +10,7 @@ jobs:
         uses: Snirpurin/MLOPS_group3/.github/workflows/tests.yml@main
     
   build-deploy:
-        needs: build
+        needs: test
         name: Setup Gcloud Account
         runs-on: ubuntu-latest
         env:
