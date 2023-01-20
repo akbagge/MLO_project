@@ -559,7 +559,7 @@ def main():
             model = NativeDDP(model, device_ids=[device], broadcast_buffers=not args.no_ddp_bb)
         # NOTE: EMA model does not need to be wrapped by DDP
 
-    ## CHANGED
+    ## CHANGED splitting train and validation folders
     if (not os.path.exists('output/')):
         splitfolders.ratio("Rice_Image_Dataset", output="output", seed=1337, ratio=(.8, .2), group_prefix=None, move=False)
         os.rename('output/val', 'output/validation')
@@ -790,7 +790,8 @@ def main():
                 args,
                 amp_autocast=amp_autocast,
                 epoch=epoch,
-                num_epochs=num_epochs
+                num_epochs=num_epochs,
+                device=device
             )
 
             if model_ema is not None and not args.model_ema_force_cpu:
@@ -805,7 +806,8 @@ def main():
                     amp_autocast=amp_autocast,
                     log_suffix=' (EMA)',
                     epoch=epoch,
-                    num_epochs=num_epochs
+                    num_epochs=num_epochs,
+                    device=device
                 )
                 eval_metrics = ema_eval_metrics
 
@@ -918,7 +920,7 @@ def train_one_epoch(
             lrl = [param_group['lr'] for param_group in optimizer.param_groups]
             lr = sum(lrl) / len(lrl)
 
-            ## CHANGED
+            ## CHANGED log step loss
             wandb.log({"loss": loss})
 
             if args.distributed:
@@ -987,8 +989,8 @@ def validate(
 
     model.eval()
 
-    ## CHANGED wandb table
-    if epoch == num_epochs:
+    ## CHANGED for wandb table, set true if final epoch
+    if epoch == num_epochs-1:
         final_val = True
     
     if final_val:
@@ -1060,7 +1062,7 @@ def validate(
                         top1=top1_m,
                         top5=top5_m)
                 )
-    ## CHANGED remember to log table
+    ## CHANGED remember to log table on final epoch
     if final_val:
         wandb.log({'table':my_table})
 
