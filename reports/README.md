@@ -284,7 +284,7 @@ Integrating our model into the cookie cutter structure was another challenge we 
 
 Student s164397: used Weights & Biases to log training progress and other important metrics/artifacts in our code.
 
-Student s221813: Main responsible for the Report, created the inital DVC implementation, and later Google Cloud Storage. In particular, created a dedicated environment for the project to keep track of packages, filled out the requirements.txt file, checked code formatting, setup version control, wrote one configuration file for our experiments, created a data storage in GCP Bucket for our data and linked this with our data version control setup.
+Student s221813: Main responsible for the Report, created the inital DVC implementation, and later Google Cloud Storage. In particular, created a dedicated environment for the project to keep track of packages, filled out the requirements.txt file, setup version control, wrote one configuration file for our experiments, created a data storage in GCP Bucket for our data and linked this with our data version control setup.
 
 Student s174261: was responsible for version control, structure of the repositoy, version control on the data and for the creating the test suite.
 
