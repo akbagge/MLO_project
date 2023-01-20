@@ -11,7 +11,7 @@ jobs:
     
   build-deploy:
         needs: test
-        name: Setup Gcloud Account
+        name: Build & Deploy
         runs-on: ubuntu-latest
         env:
           IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_APP_NAME }}
