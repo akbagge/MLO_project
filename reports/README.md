@@ -191,8 +191,6 @@ Google Cloud Platform's Engine and Bucket are two separate services that work to
 
 Bucket, on the other hand, is a cloud-based storage service that allows users to store and manage data in the cloud. It provides a simple and cost-effective way to store and access data, including large files, images, videos, and other types of data. Bucket also provides a range of security and access controls, so users can control who has access to their data and how it is used. Together, Engine and Bucket provide a powerful and reliable solution for cloud computing and storage, making it easy for users to create and manage their applications and services on the cloud.
 
--- Andreas write
-
 ### Question 18
 
 > **The backbone of GCP is the Compute engine. Explained how you made use of this service and what type of VMs**
