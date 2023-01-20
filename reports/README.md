@@ -288,6 +288,6 @@ Student s174261: was responsible for version control, structure of the repositoy
 
 Student s174250: Tested, selected and trained the base model for the project. Created the inference routine, and the API/website to interact with it. Setup github actions and the deployment pipeline. Setup Google Cloud and Cloud Run to run our containers. Setup Monitoring and Alerts in Google Cloud. 
 
-All members contributed to code by performing experiments locally. 
+All members contributed to code by performing experiments locally. This includes creating and updating dockerfiles and making changes to the package requirements file. All members also contributed to writing and finalizing the report.
 
 >>>>>>> 9a348b05162ab0f56881a8e7e5c15eef1eaaeb2c
