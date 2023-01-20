@@ -1,0 +1,9 @@
+#config.yaml
+hyperparameters:
+  batch_size: 50
+  learning_rate: 1e-4
+  seed_split: 1337
+  seed_train: default 
+  image_size: 224
+  train_val_split: ratio(.8, .2)
+
