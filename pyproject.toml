@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "MLO_project"
+version = "0.1.0"
+description = "A deep learning model for classifying rice types."
+authors = [
+    { name = "Andreas, ...", email = "andreaskbagge@gmail.com" }
+]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+dependencies = [
+    "numpy",
+    "pandas",
+    "torch",
+    "matplotlib"
+]
